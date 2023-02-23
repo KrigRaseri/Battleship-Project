@@ -1,9 +1,11 @@
 package battleship_project;
 
-public class Main {
+
+public class Main extends GameBoard{
     public static void main(String[] args)  {
-        GameBoard gb = new GameBoard();
-        gb.createBoard(gb.arr);
-        gb.printBoard(gb.arr);
+
+        Util.startGame();
+
     }
 }
+
