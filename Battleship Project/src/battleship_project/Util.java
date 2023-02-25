@@ -3,7 +3,6 @@ package battleship_project;
 import java.util.Scanner;
 
 public class Util {
-
     public static boolean checkInput(ShipTypes.Ships ship, int x, int y, int x1, int y1) {
         int size = ship.size;
         if (y == y1 && x1 - x + 1 != size) {
@@ -49,12 +48,21 @@ public class Util {
     public static void startGame() {
         ShipTypes st = new ShipTypes();
         GameBoard.createBoard(GameBoard.arr);
+        GameBoard.createBoard(GameBoard.fog);
         GameBoard.printBoard(GameBoard.arr);
 
         st.placeShip(GameBoard.arr, ShipTypes.Ships.AIRCRAFT_CARRIER);
         st.placeShip(GameBoard.arr, ShipTypes.Ships.BATTLESHIP);
-        st.placeShip(GameBoard.getArr(), ShipTypes.Ships.SUBMARINE);
-        st.placeShip(GameBoard.getArr(), ShipTypes.Ships.CRUISER);
-        st.placeShip(GameBoard.getArr(), ShipTypes.Ships.DESTROYER);
+        st.placeShip(GameBoard.arr, ShipTypes.Ships.SUBMARINE);
+        st.placeShip(GameBoard.arr, ShipTypes.Ships.CRUISER);
+        st.placeShip(GameBoard.arr, ShipTypes.Ships.DESTROYER);
+
+        System.out.println("The game starts!");
+        GameBoard.fogOfWar(GameBoard.fog);
+        System.out.println("Take a shot!");
+
+        GameBoard.fire(GameBoard.arr, GameBoard.fog, st.reader);
+        System.out.println("You sank the last ship. You won. Congratulations!");
+
     }
 }

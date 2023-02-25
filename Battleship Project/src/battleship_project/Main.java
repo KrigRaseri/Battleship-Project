@@ -6,6 +6,8 @@ public class Main extends GameBoard{
 
         Util.startGame();
 
+        ShipTypes sh = new ShipTypes();
+        //System.out.println(sh.shipList.get(0));
     }
 }
 
