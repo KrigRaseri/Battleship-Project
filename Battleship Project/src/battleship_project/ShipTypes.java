@@ -2,8 +2,21 @@ package battleship_project;
 
 import java.util.ArrayList;
 
+/**
+ * A class for the ship types which includes ship related functionality.
+ *
+ * @author Krig Raseri (Pen name)
+ * */
 public class ShipTypes extends GameBoard{
 
+    /**
+     * When a ship is hit it will take those coordinates and find which ship it belongs to, and then subtract 1 from
+     * that ships hp (health). If the ship in questions hp hits 0 isSunk will be set to true.
+     *
+     * @param shipList List of ship objects belonging to a player.
+     * @param x1 x coordinate of the shot that hit the ship.
+     * @param y1 x coordinate of the shot that hit the ship.
+     * */
     public void shipHP(ArrayList<ShipTypes> shipList, int x1, int y1){
         for (ShipTypes shipTypes : shipList) {
             for (int j = 0; j < shipTypes.shipCords.size(); j++) {
@@ -22,6 +35,11 @@ public class ShipTypes extends GameBoard{
         }
     }
 
+    /**
+     * If all ships in the ship have isSunk as true then that player loses, and the player that made the final shot wins
+     *
+     * @param shipList List of ship objects belonging to a player.
+     * */
     public boolean isWin(ArrayList<ShipTypes> shipList) {
         int nShips = shipList.size();
         for (ShipTypes s : shipList) {
@@ -34,10 +52,17 @@ public class ShipTypes extends GameBoard{
         return false;
     }
 
-    public void placeShip(String[][] arr, Ships ship) {
+    /**
+     * Places ship at coordinates x1,y1  through x2, y2.
+     *
+     * @param map Represents the users map with ships on it.
+     * @param ship Represents the Ships enumerator.
+     * @param shipList List of ship objects belonging to a player.
+     * */
+    public void placeShip(String[][] map, Ships ship, ArrayList<ShipTypes> shipList) {
         while (true) {
             System.out.printf("Enter the coordinates of the %s (%d cells):\n", ship.name, ship.size);
-            int[] cordArray = Util.toCordArray();
+            int[] cordArray = Util.toCordArray(new ShipTypes().reader);
             int x1 = cordArray[0];
             int y1 = cordArray[1] - 1;
             int x2 = cordArray[2];
@@ -57,40 +82,45 @@ public class ShipTypes extends GameBoard{
                 x2 = temp;
             }
 
+            //Checks user input for mistakes.
             if (Util.checkInput(ship, x1, y1, x2, y2)) {
                 continue;
             }
-            if (GameBoard.proxCheck(GameBoard.arr, x1, y1) || GameBoard.proxCheck(GameBoard.arr, x2, y2)) {
+
+            //Checks the proximity of the input to other ships.
+            if (GameBoard.proxCheck(map, x1, y1) || GameBoard.proxCheck(map, x2, y2)) {
                 continue;
             }
 
+            //A list of ship coordinates. (sc = shipCoordinates).
             ArrayList<int[]> sc = new ArrayList<>();
 
             //Horizontal
             if (x1 == x2) {
-                arr[x1][y1] = " O";
+                map[x1][y1] = " O";
                 int[] start = {x1, y1};
                 sc.add(start);
                 for (int i = 0; i < ship.size; i++) {
-                    arr[x2][y2 - i] = " O";
+                    map[x2][y2 - i] = " O";
                     int[] end = {x2, y2 - i};
                     sc.add(end);
                 }
-                printBoard(GameBoard.arr);
+                printBoard(map);
             }
 
             //Vertical
             else {
-                arr[x1][y1] = " O";
+                map[x1][y1] = " O";
                 int[] start = {x1, y1};
                 sc.add(start);
                 for (int i = 0; i < ship.size; i++) {
-                    arr[x2 - i][y2] = " O";
+                    map[x2 - i][y2] = " O";
                     int[] end = {x2 - i, y2};
                     sc.add(end);
                 }
-                printBoard(GameBoard.arr);
+                printBoard(map);
             }
+            //Adds the ship that was placed to the ship list.
             shipList.add(new ShipTypes(ship.name, ship.size, sc, false));
             break;
         }
@@ -100,20 +130,6 @@ public class ShipTypes extends GameBoard{
 
     //A list of all ships.
     public static ArrayList<ShipTypes> shipList = new ArrayList<>();
-
-
-    //To convert row letter to a number.
-    enum Rows {
-        A(0), B(1), C(2),
-        D(3), E(4), F(5),
-        G(6), H(7), I(8), J(9);
-
-        final int rowNum;
-
-        Rows(int rowNum) {
-            this.rowNum = rowNum;
-        }
-    }
 
     //Enum ships and constructor.
     enum Ships {

@@ -1,13 +1,15 @@
 package battleship_project;
 
+/**
+ * Battleship game project for Hyperskill/Jetbrains academy.
+ *
+ * @author Krig Raseri (Pen name).
+ * */
 
-public class Main extends GameBoard{
+public class Main {
     public static void main(String[] args)  {
-
         Util.startGame();
 
-        ShipTypes sh = new ShipTypes();
-        //System.out.println(sh.shipList.get(0));
     }
 }
 
